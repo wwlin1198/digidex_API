@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Digidex</title>
+        <style>
+            .digiinfo{
+                text-align: center;
+            }
+            #diginame{
+                font-size: 30px;
+                text-align: center;
+            }
+            #digiphoto{
+                text-align: center;
+            }
+            #level{
+                font-size: 30px;
+                text-align: center;
+            }
+            h1{
+                font-size: 80px;
+            }
+            body{
+                background-color: beige;
+            }
+        </style>
+    </head>
+    <body onload="DigiSearch()">
+    <h1 style="text-align: center;" style="font-size: 80px;">Digipedia</h1>
+
+        <div class="digiinfo">
+            
+            <h2 class="text-center">Search For Any Digimon!</h2>
+            <h4 class="text-center">Example, try typing in flymon! or any of your favorite Digimon from the past.</h4>
+            <h4 class="text-center"> This API would be helpful if someone wants to remmeber what digimon looks like. It would also help them get the level of digimon. Especially helpful when playing
+                                     a digimon game!
+            </h4>
+            <h4 class="text-center">Options you used for the API request includes:<br> Getting the name of the digimon to match the input which sends back an array with 
+                                    the image source of the digimon. It also gets the level of the digimon.
+            </h4>
+            <h4 class="text-center">Pulled from https://digimon-api.herokuapp.com/index.html</h4>
+            
+            <form id="digiForm" action="#digiDetails-page" method="post">
+                <input type="text" class="form" name="digiInsert" id="digiInsert" placeholder="Digimon Search" value="" >
+            </form>
+            <div><a class="ui-btn" onclick="DigiSearch();"></div>
+            <button type="submit"  id="button" onclick="DigiSearch();" >Search</button>
+            
+        </div>
+
+     
+        <div class="elements">
+                <br><br><br><br>
+                <div id="diginame"></div>
+                <div id="digiphoto"></div>
+                <div id="level"></div>
+        </div>
+        
+        <script language="javascript">
+            function DigiSearch(){
+                
+                var param = document.getElementById("digiInsert").value;
+                request = new XMLHttpRequest();
+                
+                request.open('GET', 'https://digimon-api.vercel.app/api/digimon/name/'+param, true);
+                request.onload = function(digimoninfo) {
+                if (request.status >= 200 && request.status < 400) {
+                    response = request.responseText;
+                    var digimoninfo = JSON.parse(response);
+                    
+                    console.log('response from XMLHttpRequest');
+                    console.log(digimoninfo);
+                   
+                    document.getElementById("diginame").innerHTML = "Digimon Name: <strong>" + digimoninfo[0].name + "</strong>";
+                    document.getElementById("digiphoto").innerHTML = '<img src="' + digimoninfo[0].img +'">';
+                    document.getElementById("level").innerHTML = "Digimon Level: " + digimoninfo[0].level;
+                } 
+  
+                };
+                request.onerror = function() {
+                
+                };
+              
+                request.send();
+
+            }
+          
+        </script>
+    </body>
+
+</html>
